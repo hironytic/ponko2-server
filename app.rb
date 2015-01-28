@@ -22,7 +22,7 @@ post '/converter/:api_name' do
     inputs = db.collection('inputs')
     inputs.find_and_modify({
       query: {'api_name' => api_name},
-      update: {'params' => params},
+      update: {'api_name' => api_name, 'params' => params},
       new: true,
       upsert: true,
     })
