@@ -34,6 +34,10 @@ post '/converter/:api_name' do
     if output == nil then
       return json({})
     else
+      if output['status'] != nil then
+        status output['status']
+      end
+      
       if output['file'] != nil then
         return send_file output['file']
       else
