@@ -19,13 +19,15 @@ end
 post '/converter/:api_name' do
   api_name = params[:api_name]
   do_with_db do |db|
-    inputs = db.collection('inputs')
-    inputs.find_and_modify({
-      query: {'api_name' => api_name},
-      update: {'api_name' => api_name, 'params' => params},
-      new: true,
-      upsert: true,
-    })
+    # inputs = db.collection('inputs')
+    # inputs.find_and_modify({
+    #   query: {'api_name' => api_name},
+    #   update: {'api_name' => api_name, 'params' => params},
+    #   new: true,
+    #   upsert: true,
+    # })
+    
+    puts "Params: #{params}"
     
     outputs = db.collection('outputs')
     output = outputs.find_one({'api_name' => api_name})
