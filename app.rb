@@ -4,16 +4,16 @@ require 'sinatra'
 require 'sinatra/json'
 require 'mongo'
 
-get '/' do
-  redirect to('/index.html')
-end
-
 def do_with_db
   mongo_uri = ENV['MONGOLAB_URI']
   db_name = mongo_uri[%r{/([^/\?]+)(\?|$)}, 1]
   client = Mongo::MongoClient.from_uri(mongo_uri)
   db = client.db(db_name)
   yield(db)
+end
+
+get '/' do
+  redirect to('/index.html')
 end
 
 post '/converter/:api_name' do
@@ -32,16 +32,16 @@ post '/converter/:api_name' do
     outputs = db.collection('outputs')
     output = outputs.find_one({'api_name' => api_name})
     if output == nil then
-      return json({})
+      next json({})
     else
       if output['status'] != nil then
         status output['status']
       end
       
       if output['file'] != nil then
-        return send_file output['file']
+        next send_file output['file']
       else
-        return json(output['data'])
+        next json(output['data'])
       end
     end
   end
